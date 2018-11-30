@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tx.bxp.mapper.BannerMapper">
+
+	<select id="SelectBannerByList" resultType="tx.bxp.entity.Banner">
+		select
+		 id,
+		 bannertitle,
+		 CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',imageurl) imageurl,
+		 returnurl,
+		 cudate,
+		 isdel
+		 from bxp_sys_banner where isdel=0
+	</select>
+
+</mapper>

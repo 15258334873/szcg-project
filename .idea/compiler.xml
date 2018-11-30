@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="szcg-bxp" />
+        <module name="szcg-czt" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="framework" target="1.8" />
+      <module name="szcg-bxp" target="1.8" />
+      <module name="szcg-bxp1" target="1.8" />
+      <module name="szcg-bxpgl" target="1.8" />
+      <module name="szcg-czt" target="1.8" />
+      <module name="szcg-project" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="szcg-bxp" options="-parameters" />
+      <module name="szcg-czt" options="-parameters" />
+    </option>
+  </component>
+</project>

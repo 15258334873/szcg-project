@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tx.bxp.mapper.SysAreaServiceMapper">
+
+
+	<select id="selectarea" resultType="HashMap">
+	select id,areaname from bxp_sys_area
+	</select>
+
+
+	<select id="selectway" resultType="HashMap" parameterType="Integer">
+	select id,wayname,areaid from bxp_sys_way where areaid=#{id}
+	</select>
+
+	<insert id="insertevaluation" parameterType="HashMap">
+	insert into  bxp_sys_evaluation( satisfaction,condition1,area,way,opinion,cudate,userid)
+	values(#{satisfaction},#{condition},#{area},#{way},#{opinion},now(),#{userid})
+	</insert>
+
+
+</mapper>

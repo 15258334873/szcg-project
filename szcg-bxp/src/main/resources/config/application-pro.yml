@@ -1,0 +1,47 @@
+server:
+  port: 8686
+  servlet:
+    context-path: /
+
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10mb
+      max-request-size: 50mb
+  application:
+    name: framework
+  datasource:
+    url: jdbc:mysql://192.168.251.48:3306/bxp?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: 123456
+  redis:
+    host: 192.168.251.49
+    port: 6379
+    database: 0
+    password: 123456
+    timeout: 1s
+  rabbitmq:
+      host: 192.168.251.51
+      port: 5672
+      username: root
+      password: 123456
+logging:
+  path: C:\log
+  level:
+    root: info
+    tx: debug
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+bxp:
+  BackpurseUrl: http://192.168.251.53:8787/bbs_purse
+  imgurl: http://192.168.251.50:8070/imgs/upload
+  imgurl1: http://222.85.161.88:9501/image
+  Actionname: 核查过期
+  Opinion:  系统提示-任务过期
+  Memo: 任务核查-核查过期
+  DataUrl: http://192.168.251.50:80/bxp

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="tx.bxp.mapper.WechatMapper">
+
+	<!--插入微信数据数据-->
+	<insert id="insertWechat" parameterType="tx.bxp.entity.PWeChat"  useGeneratedKeys="true" keyProperty="id" >
+		insert into bxp_p_wechat(userId,wechat,cudate,type,code,username,isdel)
+		values(#{userid},#{wechat},now(),#{type},#{code},#{username},0)
+	</insert>
+
+	<!--解绑我的微信-->
+	<update id="deleteWechat" parameterType="Integer">
+		delete from  bxp_p_wechat  where userId=#{Id}
+	</update>
+
+	<!--修改微信绑定状态-->
+	<update id="updateWechat" parameterType="tx.bxp.entity.PWeChat">
+		update bxp_p_wechat set type=1 where id=#{id}
+	</update>
+
+	<!--根查询Id 获取微信记录-->
+	<select id="selectWechatById" parameterType="Integer" resultType="tx.bxp.entity.PWeChat">
+		select * from bxp_p_wechat where isdel=0 and id=#{Id}
+	</select>
+
+	<!--根查询userId 获取微信记录-->
+	<select id="selectWechatByUserId" parameterType="Integer" resultType="tx.bxp.entity.PWeChat">
+		select * from bxp_p_wechat where isdel=0 and userid=#{userId}
+	</select>
+
+	<!-- 查询微信号 -->
+	<select id="selectWechat" parameterType="Integer" resultType="tx.bxp.entity.PWeChat">
+		select * from bxp_p_wechat where userId=#{userId}
+	</select>
+
+</mapper>

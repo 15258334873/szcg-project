@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>登录</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="shortcut icon" type="image/ico" th:href="@{/static/img/logo_01.png}"/>
+
+		<link rel="stylesheet" th:href="@{/static/css/login.css}" />
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="loginWin">
+				<div class="left">
+					<div class="title">
+						<p>天夏智慧</p>
+						<p>城市管理信息系统</p>
+					</div>
+				</div>
+				<div class="right">
+					<img th:src="@{/static/img/logo_01.png}"/>
+					<div class="head">
+						<p>登录</p>
+						<span></span>
+					</div>
+					<div class="loginInfo">
+						<form id="login" th:action="@{/login}" method="post">
+							<input type="text" name="username" value="admin" placeholder="请输入用户名"/>
+							<input type="password" name="password" value="123" placeholder="请输入密码"/>
+							<button type="button" class="loginBtn">登录</button>
+						</form>
+					</div>
+					<span id="validateMsg" th:text="${message}"></span>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" th:src="@{/static/plugins/jquery/jquery.js}"></script>
+    <script th:src="@{/static/js/common/util.js}"></script>
+	<script type="text/javascript">
+		$(function(){
+            initContextPath();
+			$(".loginBtn").click(function(){
+				if (validate()){
+                    $("#login").submit();
+				}
+			});
+			$("input[name='password']").keypress(function(key){
+				if (key.charCode == 13 && validate()){
+                    $("#login").submit();
+				}
+			});
+		});
+		function validate(){
+			var username = $(".loginInfo").find("input[name='username']").val();
+			var password = $(".loginInfo").find("input[name='password']").val();
+			var validateMsg = "";
+			if(username == ""){
+				validateMsg = "请输入用户名！";
+			}else if(password == ""){
+				validateMsg = "请输入密码！";
+			}
+			$("#validateMsg").text(validateMsg);
+			console.log(validateMsg)
+            return validateMsg == "";
+		}
+	</script>
+</html>

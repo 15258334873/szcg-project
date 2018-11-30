@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tx.bxp.mapper.PseeLikeMapper">
+
+	<insert id="InsertPseeLike" parameterType="tx.bxp.entity.PseeLike">
+		insert into bxp_p_seelike(info_id,info_status) values(#{infoid},#{infostatus})
+	</insert>
+
+	<update id ="UpdatePseeLike" parameterType="tx.bxp.entity.PseeLike">
+		update bxp_p_seelike
+		<trim prefix="set" suffixOverrides=",">
+			<if test="seenum != null and seenum != ''">
+				see_num = #{seenum},
+			</if>
+			<if test="likenum != null and likenum != ''">
+				like_num=#{likenum},
+			</if>
+		</trim>
+		where info_id=#{infoid} and info_status=#{infostatus}
+	</update>
+
+</mapper>

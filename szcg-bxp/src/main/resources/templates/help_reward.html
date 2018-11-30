@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>奖励帮助</title>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/about.css">
+    <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+
+    <script type="text/javascript">
+        $(function(){
+            $.ajax({
+                type : "post",
+                url : "/bxpproj/help",
+                data:{pram:"helpreward"},
+                success : function(data) {
+                    if(data.returnFlag==0){
+                        $("body").html(data.returnObj.value);
+                    }
+                }
+            });
+        });
+    </script>
+    
+</head>
+
+<body>
+    <!-- <div class="aboubox">
+        <h3 class="helpTitle"><strong>贵阳市城市管理“百姓拍”APP采集数据奖励类别及标准</strong></h3>
+        
+        <div class="tableBox">
+        
+         
+         
+         
+         <table >
+  <thead>
+  <tr >
+    <th>大类</th>
+    <th>小类</th>
+    <th>描述</th>
+    <th>处置有效时限(小时)</th>
+    <th>举报奖励标准(元/处)</th>
+    <th><p ><strong>核实有效时限</strong>(分钟)</p></th>
+    <th>核实奖励标准(元/处)</th>
+    <th>采集时间</th>
+  </tr>
+  </thead>
+  <tr >
+    <td  rowspan="6" ><p ><strong>市政道路</strong></p></td>
+    <td>排水设施 </td>
+    <td><p >燃气、供水、公共交通排水井盖缺失</p></td>
+    <td>2 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>全天 </td>
+  </tr>
+  <tr >
+    <td>路灯设施 </td>
+    <td><p >出现1盏及以上灯不亮</p></td>
+    <td>48 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>全天 </td>
+  </tr>
+  <tr >
+    <td><p >桥隧设施</p></td>
+    <td><p >护栏破损1米以上、隧道壁瓷砖脱落</p></td>
+    <td>120 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>全天 </td>
+  </tr>
+  <tr >
+    <td>下水道堵塞 </td>
+    <td><p >出现下水道、化粪池堵塞，污水外溢</p></td>
+    <td>120 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>全天 </td>
+  </tr>
+  <tr >
+    <td>道路破损 </td>
+    <td><p >道路破损面积大于1㎡</p></td>
+    <td>120 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>全天 </td>
+  </tr>
+  <tr >
+    <td>道牙破损 </td>
+    <td><p >人行道道牙缺失1米以上</p></td>
+    <td>120 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>全天 </td>
+  </tr>
+  <tr >
+    <td  rowspan="3" ><strong>环境卫生</strong></td>
+    <td>暴露垃圾 </td>
+    <td><p >公共场所未倒入垃圾容器的生活垃圾面积达1平方米以上</p></td>
+    <td>2 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td>道路不洁 </td>
+    <td><p >未及时处理的道路保洁问题面积达2㎡以上</p></td>
+    <td>0.5 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td>家具、设备乱堆放 </td>
+    <td>长期乱堆放 </td>
+    <td>24 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td  rowspan="4" ><strong>环境卫生</strong></td>
+    <td>公共厕所 </td>
+    <td>设施严重破坏、堵塞 </td>
+    <td>168 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td>公共厕所 </td>
+    <td>设施脏污、厕所内环境脏污 </td>
+    <td>2 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td>垃圾箱 </td>
+    <td>严重破损、丢失 </td>
+    <td>48 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td>垃圾箱 </td>
+    <td>无人清运、外观不洁 </td>
+    <td>2 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td  rowspan="6" ><strong>市容秩序</strong></td>
+    <td>门面延伸占道经营 </td>
+    <td>指门面经营户超出门面区域摆放物品经营的行为 </td>
+    <td>4 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td><p >室外LED屏</p></td>
+    <td>指未经批准擅自设置LED屏 </td>
+    <td>120 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-24:00 </td>
+  </tr>
+  <tr >
+    <td>非法小广告 </td>
+    <td>公共场所内、公共设施上非法张贴、喷涂、手写的各类广告及乱涂乱画现象 </td>
+    <td>24 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td><p >张贴悬挂广告牌匾</p></td>
+    <td><p >未经批准张贴悬挂广告牌匾</p></td>
+    <td>24 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td>占道广告牌 </td>
+    <td>未按批准要求占道设置广告牌、灯箱、充气模型和拱门等 </td>
+    <td>4 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td>街头散发广告 </td>
+    <td>在公共场所散发广告的现象 </td>
+    <td>2 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td  ><strong>市容秩序</strong></td>
+    <td>广告招牌破损 </td>
+    <td>门头广告、招牌破损、临时性标语宣传品损毁、广告牌倾倒等 </td>
+    <td>240 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td  rowspan="8" ><strong>市容秩序</strong></td>
+    <td>横幅乱吊乱挂 </td>
+    <td>未按批准要求悬挂横幅 </td>
+    <td>4 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td>施工占道 </td>
+    <td>施工过程中未经审批擅自占道的现象 </td>
+    <td>24 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td>油烟污染 </td>
+    <td>未经允许开展室外经营活动造成油烟污染 </td>
+    <td>24 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td>延伸占道经营（作业） </td>
+    <td>未经许可在城市道路、公共场所开展延伸占道经营（作业）行为 </td>
+    <td>4 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td>占道废品收购 </td>
+    <td>未经许可在城市道路、公共场所从事收购废品的占道行为 </td>
+    <td>2 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td>商业宣传噪音 </td>
+    <td>沿街商家使用各种音响器材播音，音量超过有关标准或影响居民生活的现象 </td>
+    <td>4 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td>占道经营 </td>
+    <td>经营摊贩聚集（2个以上）或形成马路市场 </td>
+    <td>4 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td>沿街晾挂 </td>
+    <td>在主要道路及公共场所的树木和护栏、路牌、电线、电杆等设施上吊挂、晾晒物品的行为 </td>
+    <td>4 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td  ><strong>渣土管理</strong></td>
+    <td>积存渣土 </td>
+    <td>未及时清理的渣土 </td>
+    <td>48 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-24:00 </td>
+  </tr>
+  <tr >
+    <td  rowspan="2" ><strong>渣土管理</strong></td>
+    <td>工地出入口污染 </td>
+    <td>工地出入口污染临近路面5㎡以上 </td>
+    <td>4 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>全天 </td>
+  </tr>
+  <tr >
+    <td>道路撒漏 </td>
+    <td>车辆运输或装卸过程中发生遗撒现象 </td>
+    <td>4 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>全天 </td>
+  </tr>
+  <tr >
+    <td  rowspan="2" ><strong>园林绿化</strong></td>
+    <td>绿化保洁 </td>
+    <td>绿地、绿化设施内可见垃圾较多，城市主要干道绿化带植被积灰积尘不见本色 </td>
+    <td>2 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td>绿化维护 </td>
+    <td>1.绿地、绿化设施植被枯萎、缺失、土面硬化面积达1㎡以上；<br>
+      2.绿化设施护栏、护板等破损、缺失。 </td>
+    <td>120 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>9:00-22:00 </td>
+  </tr>
+  <tr >
+    <td  rowspan="2" ><strong>工地管理</strong></td>
+    <td>建筑围栏污损 </td>
+    <td><p >建筑围栏污染或破损面积大于1㎡ </td>
+    <td>48 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>全天 </td>
+  </tr>
+  <tr >
+    <td>未按标准设置工地围栏（围墙） </td>
+    <td><p >施工区域未按标准进行围场施工或修建围墙 </td>
+    <td>120 </td>
+    <td>10</td>
+    <td>30 </td>
+    <td>20</td>
+    <td>全天 </td>
+  </tr>
+</table>
+         
+         
+         
+         
+         
+         
+                
+ </div>
+        
+    </div>
+    
+    
+    <a href="help.html" class="backHelp">返回</a> -->
+</body>
+
+</html>

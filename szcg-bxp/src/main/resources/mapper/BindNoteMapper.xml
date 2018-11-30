@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="tx.bxp.mapper.BindNoteMapper">
+
+    <insert id="insertBindNote" parameterType="tx.bxp.entity.BindNote">
+		insert into bxp_bindnote(userId,username,bankname,bNumber,cudate,type,flag,status,msg,money)
+		values(#{userid},#{username},#{bankname},#{bNumber},now(),#{type},#{flag},#{status},#{msg},#{money})
+	</insert>
+
+<!--	<insert id="insertBindNote" parameterType="tx.bxp.entity.BindNote">
+		insert into bxp_bindnote(userId,username,bankname,bNumber,cudate,type,flag,status,msg,money)
+		values(#{userId},#{username},#{bankname},#{bnumber},now(),#{type},#{flag},#{status},#{msg},#{money})
+	</insert>-->
+  <!--  <select id="findByUsername" parameterType="HashMap" resultType="com.sjkj.yh.szcg.entity.BindNote">
+        select * from (select row_number() over(order by cudate desc) as rownum,* from b_bindnote where username = #{username} and type=#{type}) a
+        <where>
+            <if test="newbeginIndex != null and newbeginIndex != ''">
+                <![CDATA[ rownum > #{newbeginIndex} ]]>
+            </if>
+            <if test="newendIndex != null and newendIndex != ''">
+                <![CDATA[and rownum <= #{newendIndex} ]]>
+            </if>
+        </where>
+    </select>
+-->
+</mapper>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tx.bxp.mapper.BxpProjectDetailMapper">
+
+    <insert id="InsertBxpProjectDetail" parameterType="tx.bxp.entity.BxpProjectDetail" >
+ 		insert into b_project_detail(Proj_Code,Proj_Name,Proj_Num,Proj_Desc,Fid,Creator_User_Id,address,device_sign)
+ 		values(#{projCode},#{projName},#{projNum},#{projDesc},#{fid},#{creatorUserId},#{address},#{devicesign})
+	</insert>
+
+</mapper>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/szcg-bxp/szcg-bxp.iml" filepath="$PROJECT_DIR$/szcg-bxp/szcg-bxp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/szcg-czt/szcg-czt.iml" filepath="$PROJECT_DIR$/szcg-czt/szcg-czt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/szcg-project.iml" filepath="$PROJECT_DIR$/szcg-project.iml" />
+    </modules>
+  </component>
+</project>

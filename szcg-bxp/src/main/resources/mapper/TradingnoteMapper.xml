@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="tx.bxp.mapper.TradingnoteMapper">
+
+    <!-- 保存交易记录 -->
+    <insert id="save" parameterType="tx.bxp.entity.Tradingnote">
+		insert into bxp_tradingnote(username,userId,tradingTime,account,amont,bankId,type,pId,handingtime,flag,msg,state,exceptionalTime,status,checkTime,conditions)
+		values(#{username},#{userid},#{tradingTime},#{account},#{amont},#{bankId},#{type},#{pid},#{handingtime},#{flag},#{msg},#{state},#{exceptionalTime},#{status},#{checkTime},#{conditions})
+	</insert>
+
+    <!-- 解绑校验是否有奖励正在提现中 -->
+    <select id="selectTradingnoteByUsernameAndType" parameterType="HashMap" resultType="Integer">
+		select count(1) from bxp_tradingnote where username=#{username} and type=#{type} and flag= 2
+	</select>
+
+
+    <!-- 对账查询 -->
+    <select id="selectTradingnotes" parameterType="HashMap" resultType="tx.bxp.entity.Tradingnote">
+		select * from bxp_tradingnote order by tradingTime where tradingTime between #{startTime} and #{endTime}
+	</select>
+
+    <!-- 查询明细 -->
+    <select id="selectTradingnote" parameterType="HashMap" resultType="HashMap">
+
+        select * from bxp_tradingnote where username=#{username} order by id desc limit #{newbeginIndex},#{newendIndex}
+
+    </select>
+
+    <!-- 根据手机号和流水号查询交易记录 -->
+    <select id="findPidByUsernameAndBankId" parameterType="tx.bxp.entity.Tradingnote" resultType="tx.bxp.entity.Tradingnote">
+		select * from bxp_tradingnote where username=#{username} and bankId=#{bankId}
+	</select>
+
+    <!-- 更改交易的状态和提示信息 -->
+    <update id="updateTradingnote" parameterType="tx.bxp.entity.Tradingnote">
+		UPDATE bxp_tradingnote set flag=#{flag},msg=#{msg} WHERE bankId = #{bankId} and username=#{username}
+	</update>
+
+
+    <!-- 微信回调更改交易方法 -->
+    <update id="updateState" parameterType="tx.bxp.entity.Tradingnote">
+		UPDATE bxp_tradingnote set flag=#{flag},msg=#{msg},handingtime=#{handingtime},state=#{state} WHERE bankId = #{bankId} and username=#{username}
+	</update>
+
+    <!-- 06回调更改交易方法 -->
+    <update id="updateStatus" parameterType="tx.bxp.entity.Tradingnote">
+		UPDATE bxp_tradingnote set flag=#{flag},msg=#{msg},exceptionalTime=#{exceptionalTime},status=#{status} WHERE bankId = #{bankId} and username=#{username}
+	</update>
+
+    <!-- 对账更改交易方法 -->
+    <update id="updateCondition" parameterType="tx.bxp.entity.Tradingnote">
+		UPDATE bxp_tradingnote set flag=#{flag},msg=#{msg},checkTime=#{checkTime},condition=#{condition} WHERE bankId = #{bankId} and username=#{username}
+	</update>
+
+
+    <!-- 根据pId更改交易记录 -->
+    <update id="updateTradingnote2" parameterType="tx.bxp.entity.Tradingnote">
+		UPDATE bxp_tradingnote set flag = #{flag} , bankId = #{bankId} , msg = #{msg} WHERE pId = #{pId}
+	</update>
+</mapper>

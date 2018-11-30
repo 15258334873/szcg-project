@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tx.bxp.mapper.bxpProjAwardMapper">
+
+
+	<select id="getaccount" parameterType="Integer" resultType="tx.bxp.entity.ProjectAward">
+		select  IFNULL(sum(money),0) money,IFNULL(sum(score),0) score  from  bxp_project_award where userId=#{userid} and state=1 and flag=0
+	</select>
+
+	<select id="Cumulative" parameterType="Integer" resultType="tx.bxp.entity.ProjectAward">
+		select  IFNULL(sum(money),0) money,IFNULL(sum(score),0) score  from  bxp_project_award where userId=#{userid} and state=1 and flag in (1,2)
+	</select>
+
+	<select id="findById" parameterType="Integer" resultType="tx.bxp.entity.ProjectAward">
+		  select * from bxp_project_award where id=#{id}
+	</select>
+
+	<update id="updateProjectAward" parameterType="tx.bxp.entity.ProjectAward">
+	update bxp_project_award
+		<trim prefix="set" suffixOverrides=",">
+			<if test="flag != null">flag=#{flag},</if>
+			<if test="userid != null">userId=#{userid},</if>
+			<if test="state != null">state=#{state},</if>
+		</trim>
+		where id=#{id}
+	</update>
+
+	<update id="editProjectAward" parameterType="HashMap">
+		update bxp_project_award
+		<trim prefix="set" suffixOverrides=",">
+			<if test="flag != null">flag=#{flag},</if>
+		</trim>
+		where id=#{id}
+	</update>
+	
+	
+	<select id="selectProjectAwardByUserId" parameterType="HashMap" resultType="tx.bxp.dto.MyProjectAward">
+	select t.id id,userId,pId, money,score,DATE_FORMAT(cudate,'%Y-%m-%d') cudate,flag,task_type tasktype, Proj_Desc mome  from(
+	select * from bxp_project_award where userId=#{uId} and state=1 and money  &gt; 0
+		<if test="flag != null and flag != ''"> and flag=#{flag}</if>
+	 order by cudate desc limit #{pagenum},#{everypage}
+	) t
+	left join (
+	select * from b_project_detail where Proj_Code in (select * from (select pid from bxp_project_award where userId=#{uId} and state=1 and money  &gt; 0  <if test="flag != null and flag != ''"> and flag=#{flag}</if>  order by cudate desc limit #{pagenum},#{everypage}) t3))
+	t1 on t.pId=t1.Proj_Code
+</select>
+
+
+</mapper>

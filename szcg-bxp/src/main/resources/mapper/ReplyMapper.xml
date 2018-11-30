@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tx.bxp.mapper.ReplyMapper">
+
+    <!--插入回复表数据-->
+    <insert id="insertReply" parameterType="tx.bxp.entity.Reply">
+		insert into bxp_p_Reply(userid,proj_id,content,replydate,type,address,Fid)
+		 values(#{userid},#{projid},#{content},now(),#{type},#{address},#{fid})
+	</insert>
+
+    <select id="selectReplyByPId" parameterType="tx.bxp.dto.Preply" resultType="tx.bxp.dto.Preply">
+SELECT t1.id id,userid uid,content content,nickname,
+IFNULL(CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',photo),'') AS photo,
+replydate cudate,
+proj_id pid,
+reply_status replystatus,
+ #{type} type,
+ 0 isPraise ,
+ 0  likesum,
+ IFNULL(t1.address,'') address
+    FROM (
+SELECT id ,userid,content,proj_id,replydate,reply_status,address FROM bxp_p_reply  WHERE isdel=0 and proj_id=#{id} and TYPE=#{type} ORDER BY replydate ASC LIMIT #{Page},#{PageSize}) t1
+LEFT JOIN
+(SELECT * FROM  bxp_p_userinfo WHERE id IN (SELECT DISTINCT * FROM (
+SELECT userid FROM bxp_p_reply WHERE isdel=0 and proj_id=#{id} and TYPE=#{type} ORDER BY replydate ASC LIMIT #{Page},#{PageSize} ) t3 )) t2 ON t1.userid=t2.id
+	</select>
+
+</mapper>

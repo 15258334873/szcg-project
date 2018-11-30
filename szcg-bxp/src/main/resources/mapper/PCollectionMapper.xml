@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tx.bxp.mapper.PCollectionMapper">
+
+	<!--插入收藏数据-->
+	<insert id="InsertPcollection" parameterType="tx.bxp.entity.PCollection">
+		insert into bxp_p_collection(user_Id,p_Id,type,cudate,isdel) values(#{userid},#{pid},#{type},now(),0)
+	</insert>
+	<!--删除收藏记录-->
+	<update id="DeletePcollection" parameterType="HashMap">
+		delete from bxp_p_collection  where p_Id=#{pId} and user_Id=#{userId} and type=#{type}
+	</update>
+
+	<!--查询个人收藏记录-->
+	<select id="selectPCollectionByUserId" parameterType="HashMap" resultType="tx.bxp.dto.MyBxpProject">
+	select * from (
+		select '' title, t1.Proj_Code id,t1.Creation_Time CreationTime ,Proj_Desc mome, Fid, Address,IFNULL(imgurl,'') imgurl,IFNULL(audiourl,'') audiourl ,IFNULL(videourl,'') videourl,0 type,0 state,t1.Proj_Code Projcode,0 score,0 money from
+		(select Proj_Code,Creation_Time,Proj_Source_Way from b_project where  Proj_Code in (select p_Id from bxp_p_collection  where user_Id=#{userId} and isdel=0 and type=0  ) and Proj_Source_Way=5 and state=1 order by Creation_Time desc ) t1
+		left join
+		b_project_detail on t1.Proj_Code=b_project_detail.Proj_Code
+		left join
+		(
+		select post_id,
+			IFNULL(CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path),'') as imgurl,
+			IFNULL(CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path),'') as audiourl,
+		    IFNULL(CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path),'') as videourl
+		 from (
+			select
+				bxp_p_file.*,row_number() over (partition by post_id,post_status,file_type order by file_type) rn
+			from bxp_p_file) t3
+		  where post_status=0  and rn=1) t2 on  t1.Proj_Code=t2.post_id
+union
+select title title, t1.id id ,t1.creat_time CreationTime ,content mome, '' Fid,'' Address,IFNULL(imgurl,'') imgurl,IFNULL(audiourl,'') audiourl ,IFNULL(videourl,'') videourl,info_type type,0 state,t1.id Projcode,0 score,0 money   from
+(select id,content,creat_time,info_type,title  from  bxp_p_info where id in  (select p_Id from bxp_p_collection  where user_Id=#{userId} and isdel=0 and type in(4,5,6,7) )  order by creat_time desc ) t1
+		left join
+		(
+		select post_id,
+			IFNULL(CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path),'') as imgurl,
+			IFNULL(CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path),'') as audiourl,
+		  	IFNULL(CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path),'') as videourl
+		 from (
+			select
+				bxp_p_file.*,row_number() over (partition by post_id,post_status,file_type order by file_type) rn
+			from bxp_p_file) t3
+		  where post_status=1  and rn=1) t2 on  t1.id=t2.post_id
+) t5 LIMIT #{Page},#{PageSize}
+	</select>
+
+
+
+</mapper>

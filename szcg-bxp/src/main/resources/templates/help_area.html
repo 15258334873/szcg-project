@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>奖励帮助</title>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/about.css">
+    <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+
+    <script type="text/javascript">
+        $(function(){
+            $.ajax({
+                type : "post",
+                url : "/bxpproj/help",
+                data:{pram:"helparea"},
+                success : function(data) {
+                    if(data.returnFlag==0){
+                        $("body").html(data.returnObj.value);
+                    }
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+ <!--   <div class="aboubox">
+        <h3 class="helpTitle"><strong>贵阳市城市管理“百姓拍”APP公众参与奖励实施地域范围</strong></h3>
+        
+        <div class="inforBox areaBox">
+        
+         <div class="areaList"> <h4>云岩区</h4>
+            <p>北京路、中华北路、中华中路、延安东路、瑞金北路、瑞金中路、宝山北路、中山西路、中山东路、市北路、八鸽岩路、盐务街、贵乌路、金仓路、安云路、大营路、新添大道（南段）、枣山路、北新区路、永乐路、毓秀路、沙河街、普陀路、陕西路、黔灵东路、黔灵西路、新印厂路、旭东路、富水北路、威清路、黄金路、双峰路、山林路、浣纱路、松山路、市西路、省府路、省府西路、东山路、东新路人行道及车行道。</p></div>
+            
+         <div class="areaList">  <h4>南明区</h4>
+            <p>中华南路、中山南路、都司路、遵义路、瑞金南路、宝山南路、兴关路、解放路、青年路、市南路、新华路、兴隆街、西湖路、观水路、文化路、沙冲北路、贵惠路、箭道街、南厂路、曹状元街、南浦路、文昌南路、富水南路、博爱路、上观水路人行道及车行道。</p></div>
+            
+         <div class="areaList">  <h4>观山湖区</h4>
+            <p>林城东路（不含延伸段）、林城西路、金朱东路、金朱西路、云潭南路、云潭北路、金阳南路、金阳北路、观山东路（观山湖区段）、观山西路、石标路、长岭北路、长岭南路、碧海南路、兴筑路、黔灵山路（观山湖区段）、石林东路、都匀路、西二环（金中立交至阳关城市花园）、创新东路、阳关大道、北京西路（观山湖区段）人行道及车行道。</p></div>
+            
+             <strong> 奖励区域范围根据实际需要逐步扩展，并及时向社会公布具体内容。</strong>
+                
+ </div>
+        
+    </div>
+    
+    <a href="help.html" class="backHelp">返回</a>  -->
+</body>
+
+</html>

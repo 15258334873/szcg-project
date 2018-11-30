@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tx.bxp.mapper.TaskMapper">
+
+    <select id="selectPTask" parameterType="HashMap" resultType="tx.bxp.dto.MyPTask">
+		SELECT T1.*,
+		IFNULL(T2.prjimg,'') prjimg ,
+		IFNULL(T2.videour,'') videour,
+		IFNULL(T2.manageurl,'') manageurl,
+		IFNULL(T2.managevide,'') managevide
+
+		FROM (
+		select
+		id awid,
+		proj_code projcode,
+		task_describe mome,
+		gather_date gatherdate,
+		rob_limit worktime,
+		address ,
+		money ,
+		score ,
+		0 fstate,
+		0 ismake,
+		IFNULL(Fid,'0,0') fid
+		 from p_task where user_id is null and IsTimeOut=0 and Isfinish=0 and TIMESTAMPDIFF(MINUTE,cu_date,now()) &lt; rob_limit order by cu_date limit #{Page},#{PageSize} ) T1
+
+		LEFT JOIN
+		( select t2.post_id,prjimg,videour,manageurl,managevide from (
+		SELECT post_id, IFNULL(GROUP_CONCAT(imgurl SEPARATOR '|'),'') AS prjimg
+		FROM (
+		SELECT post_id,
+		CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path) AS imgurl
+		FROM bxp_p_file  WHERE file_type=1 AND file_status=0
+		)t1 GROUP BY post_id
+		) t2
+		left join
+		(
+		SELECT post_id, IFNULL(GROUP_CONCAT(imgurl SEPARATOR '|'),'') AS videour
+		FROM (
+		SELECT post_id,
+		CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path) AS imgurl
+		FROM bxp_p_file  WHERE file_type=2 AND file_status=0
+		)t1 GROUP BY post_id
+		) t3
+		on t2.post_id=t3.post_id
+
+		left join
+		(
+		SELECT post_id, IFNULL(GROUP_CONCAT(imgurl SEPARATOR '|'),'') AS manageurl
+		FROM (
+		SELECT post_id,
+		CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path) AS imgurl
+		FROM bxp_p_file  WHERE file_type=1 AND file_status=1
+		)t1 GROUP BY post_id
+		) t4
+		on t2.post_id=t4.post_id
+		left join
+		(SELECT post_id, IFNULL(GROUP_CONCAT(imgurl SEPARATOR '|'),'') AS managevide
+		FROM (
+		SELECT post_id,
+		CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path) AS imgurl
+		FROM bxp_p_file  WHERE file_type=2 AND file_status=1
+		)t1 GROUP BY post_id
+		) t5
+		on t2.post_id=t5.post_id) T2
+		on T1.projcode=T2.post_id
+	</select>
+
+    <select id="MyPTask1" parameterType="Integer" resultType="tx.bxp.dto.MyPTask">
+
+		SELECT T1.*,
+		IFNULL(T2.prjimg,'') prjimg ,
+		IFNULL(T2.videour,'') videour,
+		IFNULL(T2.manageurl,'') manageurl,
+		IFNULL(T2.managevide,'') managevide
+		FROM (
+		select
+		id awid,
+		proj_code projcode,
+		task_describe mome,
+		gather_date gatherdate,
+		rob_limit worktime,
+		address ,
+		money ,
+		score ,
+		0 fstate,
+		0 ismake,
+		IFNULL(Fid,'0,0') fid
+		 from p_task where proj_code=#{projectId} order by cu_date desc limit 1   ) T1
+
+		LEFT JOIN
+		( select t2.post_id,prjimg,videour,manageurl,managevide from (
+		SELECT post_id, IFNULL(GROUP_CONCAT(imgurl SEPARATOR '|'),'') AS prjimg
+		FROM (
+		SELECT post_id,
+		CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path) AS imgurl
+		FROM bxp_p_file  WHERE file_type=1 AND file_status=0
+		)t1 GROUP BY post_id
+		) t2
+		left join
+		(
+		SELECT post_id, IFNULL(GROUP_CONCAT(imgurl SEPARATOR '|'),'') AS videour
+		FROM (
+		SELECT post_id,
+		CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path) AS imgurl
+		FROM bxp_p_file  WHERE file_type=2 AND file_status=0
+		)t1 GROUP BY post_id
+		) t3
+		on t2.post_id=t3.post_id
+
+		left join
+		(
+		SELECT post_id, IFNULL(GROUP_CONCAT(imgurl SEPARATOR '|'),'') AS manageurl
+		FROM (
+		SELECT post_id,
+		CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path) AS imgurl
+		FROM bxp_p_file  WHERE file_type=1 AND file_status=1
+		)t1 GROUP BY post_id
+		) t4
+		on t2.post_id=t4.post_id
+		left join
+		(SELECT post_id, IFNULL(GROUP_CONCAT(imgurl SEPARATOR '|'),'') AS managevide
+		FROM (
+		SELECT post_id,
+		CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path) AS imgurl
+		FROM bxp_p_file  WHERE file_type=2 AND file_status=1
+		)t1 GROUP BY post_id
+		) t5
+		on t2.post_id=t5.post_id) T2
+		on T1.projcode=T2.post_id
+</select>
+
+    <select id="myselectPTask" parameterType="HashMap" resultType="tx.bxp.dto.MyPTask">
+        SELECT T1.*,
+        IFNULL(T2.prjimg,'') prjimg ,
+        IFNULL(T2.videour,'') videour,
+        IFNULL(T2.manageurl,'') manageurl,
+        IFNULL(T2.managevide,'') managevide
+
+        FROM (
+        select
+        id awid,
+        proj_code projcode,
+        task_describe mome,
+        gather_date gatherdate,
+        rob_limit worktime,
+        address ,
+        money ,
+        score ,
+        0 fstate,
+        Isfinish ismake,
+        IFNULL(Fid,'0,0') fid,
+        0 type
+        from p_task where user_id =#{userId}
+
+        <if test="ismake!=null and ismake!=''">
+            and Isfinish=#{ismake}
+        </if>
+        order by cu_date limit #{Page},#{PageSize} ) T1
+
+        LEFT JOIN
+        ( select t2.post_id,prjimg,videour,manageurl,managevide from (
+        SELECT post_id, IFNULL(GROUP_CONCAT(imgurl SEPARATOR '|'),'') AS prjimg
+        FROM (
+        SELECT post_id,
+        CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path) AS imgurl
+        FROM bxp_p_file WHERE file_type=1 AND file_status=0
+        )t1 GROUP BY post_id
+        ) t2
+        left join
+        (
+        SELECT post_id, IFNULL(GROUP_CONCAT(imgurl SEPARATOR '|'),'') AS videour
+        FROM (
+        SELECT post_id,
+        CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path) AS imgurl
+        FROM bxp_p_file WHERE file_type=2 AND file_status=0
+        )t1 GROUP BY post_id
+        ) t3
+        on t2.post_id=t3.post_id
+
+        left join
+        (
+        SELECT post_id, IFNULL(GROUP_CONCAT(imgurl SEPARATOR '|'),'') AS manageurl
+        FROM (
+        SELECT post_id,
+        CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path) AS imgurl
+        FROM bxp_p_file WHERE file_type=1 AND file_status=1
+        )t1 GROUP BY post_id
+        ) t4
+        on t2.post_id=t4.post_id
+        left join
+        (SELECT post_id, IFNULL(GROUP_CONCAT(imgurl SEPARATOR '|'),'') AS managevide
+        FROM (
+        SELECT post_id,
+        CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path) AS imgurl
+        FROM bxp_p_file WHERE file_type=2 AND file_status=1
+        )t1 GROUP BY post_id
+        ) t5
+        on t2.post_id=t5.post_id) T2
+        on T1.projcode=T2.post_id
+
+    </select>
+
+    <select id="selectPTaskById" parameterType="Integer" resultType="tx.bxp.entity.PTask">
+		select
+		id id,
+		proj_code projcode,
+		task_describe taskdescribe,
+		gather_date gatherdate,
+		reply_context replycontext,
+		cu_date cudate,
+		rob_limit roblimit,
+		rob_date robdate,
+		reply_limit replylimit,
+		IsTimeOut ,
+		Isfinish ,
+		user_id userid,
+		address ,
+		money ,
+		score ,
+		IFNULL(Fid,'0,0') fid
+		 from p_task where id=#{id}  and TIMESTAMPDIFF(MINUTE,cu_date,now()) &lt; rob_limit
+	</select>
+
+    <select id="selectPTaskById1" parameterType="Integer" resultType="tx.bxp.entity.PTask">
+		select
+		id id,
+		proj_code projcode,
+		task_describe taskdescribe,
+		gather_date gatherdate,
+		reply_context replycontext,
+		cu_date cudate,
+		rob_limit roblimit,
+		rob_date robdate,
+		reply_limit replylimit,
+		IsTimeOut ,
+		Isfinish ,
+		user_id userid,
+		address ,
+		money ,
+		score ,
+		IFNULL(Fid,'0,0') fid
+		 from p_task where id=#{id}  and TIMESTAMPDIFF(MINUTE,rob_date,now()) &lt; reply_limit
+	</select>
+
+
+    <update id="UpdateTask" parameterType="tx.bxp.entity.PTask">
+		update p_task
+		 set user_id = #{userid},rob_date=now()
+		 where id=#{id}
+	</update>
+
+    <update id="UpdateTask1" parameterType="tx.bxp.entity.PTask">
+		update p_task
+		 set Isfinish = #{isfinish}
+	  	 where id=#{id}
+	</update>
+
+
+    <select id="selectnodeaction" parameterType="Integer" resultType="tx.bxp.dto.NodeAction">
+	 select
+	id id,
+	Action_Id actionId,
+	Flow_Id flowId,
+	Action_Name actionName,
+	Display_Name displayName,
+	Node_Id nodeId,
+	Next_Node_Id nextNodeId
+  from f_node_action where Action_Id=51
+	</select>
+
+    <update id="UpdateProject" parameterType="HashMap">
+		update b_project set Node_Id=#{NextNodeId} where Proj_Code=#{pId}
+	</update>
+
+    <insert id="saveprojecttrace" parameterType="HashMap">
+		insert into b_project_trace(Proj_Code,Pre_Node_Id,Current_Node_Id,action_id,Action_Name,Opinion)
+		values (#{ProjCode},#{PreNodeId},#{CurrentNodeId},#{actionId},#{ActionName},#{Opinion})
+	</insert>
+
+	<select id="SelectpastPTask" resultType="tx.bxp.entity.PTask">
+		select
+		id id,
+		proj_code projcode,
+		task_describe taskdescribe,
+		gather_date gatherdate,
+		reply_context replycontext,
+		cu_date cudate,
+		rob_limit roblimit,
+		rob_date robdate,
+		reply_limit replylimit,
+		IsTimeOut ,
+		Isfinish ,
+		user_id userid,
+		address ,
+		money ,
+		score ,
+		IFNULL(Fid,'0,0') fid
+		  from  p_task  where TIMESTAMPDIFF(MINUTE,cu_date,now()) &gt; rob_limit and IsTimeOut=0 and user_id is null
+	</select>
+
+	<update id="updatepastPTask" parameterType="Integer">
+		update p_task set IsTimeOut=1 where id=#{id}
+	</update>
+
+
+	<update id="Updateproject" parameterType="Integer">
+		update b_project set Node_Id=10 where Proj_Code=#{Projcode} and Proj_Source_Way=5
+	</update>
+
+	<select id="NOuserPTask" resultType="tx.bxp.entity.PTask">
+		select
+		id id,
+		proj_code projcode,
+		task_describe taskdescribe,
+		gather_date gatherdate,
+		reply_context replycontext,
+		cu_date cudate,
+		rob_limit roblimit,
+		rob_date robdate,
+		reply_limit replylimit,
+		IsTimeOut ,
+		Isfinish ,
+		user_id userid,
+		address ,
+		money ,
+		score ,
+		IFNULL(Fid,'0,0') fid
+		  from  p_task  where TIMESTAMPDIFF(MINUTE,rob_date,now()) &gt; reply_limit and user_id is not null and Isfinish=0
+	</select>
+
+    <update id="updatepastPTask1" parameterType="Integer">
+		update p_task set Isfinish=2 where id=#{id}
+	</update>
+
+	<select id="NOuserPTask1" resultType="tx.bxp.entity.PTask" parameterType="Integer">
+		select
+		id id,
+		proj_code projcode,
+		task_describe taskdescribe,
+		gather_date gatherdate,
+		reply_context replycontext,
+		cu_date cudate,
+		rob_limit roblimit,
+		rob_date robdate,
+		reply_limit replylimit,
+		IsTimeOut ,
+		Isfinish ,
+		user_id userid,
+		address ,
+		money ,
+		score ,
+		IFNULL(Fid,'0,0') fid
+		  from  p_task  where  Isfinish=1 and state=0 and proj_code=#{Projcode}
+	</select>
+
+	<update id="updatepastPTaskstate1" parameterType="Integer">
+		update p_task set state=1 where id=#{id}
+	</update>
+
+	<update id="updatepastPTaskstate2" parameterType="Integer">
+		update p_task set state=2 where id=#{id}
+	</update>
+
+	<update id="updatepastPW" parameterType="Integer">
+		update bxp_project_award set state=1 where task_id=#{id}
+	</update>
+
+	<insert id="Inserprojecttrace" parameterType="tx.bxp.entity.ProjectTrace">
+		INSERT INTO b_project_trace (
+		Proj_Code,
+		Pre_Node_Id,
+		Current_Node_Id,
+		action_id,
+		Action_Name,
+		User_Code,
+		Creation_Time,
+		Depart_Code,
+		Opinion,
+		Is_Return,
+		Is_TimeOut,
+		Memo,
+		Role_Id)
+VALUES ( #{projcode}, '10.1', '10', 99, #{actionname}, 0, now(), null, #{opinion}, 0, 1, #{memo}, null);
+
+
+	</insert>
+
+</mapper>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tx.bxp.mapper.UserinfoMapper">
+
+	<!-- 插入用户信息-->
+	<insert id="insertUserInfo" parameterType="tx.bxp.entity.Userinfo"  useGeneratedKeys="true" keyProperty="id" >
+		        INSERT INTO bxp_p_userinfo (loginname,password,paypassword,nickname,sex,photo,
+		        registerdate,lastlogindate,isdel,wechat,address,email,gradeid,integral,cityid,islogin,version,unionid,type,channelid,flag)
+                VALUES (#{loginname},#{password},#{paypassword},#{nickname},#{sex},#{photo},now(),now(),0,#{wechat},#{address},#{email},0,0,0,0,#{version},#{unionid},#{type},#{channelid},#{flag})
+	</insert>
+
+	<!--更新用户信息-->
+	<update id="updateUser" parameterType="tx.bxp.entity.Userinfo">
+		UPDATE bxp_p_userinfo
+		<trim prefix="set" suffixOverrides=",">
+			<if test="loginname != null">loginname=#{loginname},</if>
+			<if test="password != null">password=#{password},</if>
+			<if test="paypassword != null">paypassword=#{paypassword},</if>
+			<if test="nickname != null">nickname=#{nickname},</if>
+			<if test="sex != null">sex=#{sex},</if>
+			<if test="photo != null">photo=#{photo},</if>
+			<if test="lastlogindate != null">lastlogindate=#{lastlogindate},</if>
+			<if test="address != null">address=#{address},</if>
+			<if test="email != null">email=#{email},</if>
+			<if test="version != null">version=#{version},</if>
+			<if test="unionid != null">unionid=#{unionid},</if>
+			<if test="type != null">type=#{type},</if>
+			<if test="channelid != null">channelid=#{channelid},</if>
+			<if test="flag != null">flag=#{flag},</if>
+		</trim>
+         WHERE bxp_p_userinfo.id = #{id}
+	</update>
+
+	<!--用户登录密码找回-->
+	<select id="SelectUserInfoByLoginName" resultType="String" parameterType="String">
+		select loginname from bxp_p_userinfo where loginname=#{LoginName} and isdel=0
+	</select>
+
+	<select id="SelectUserInfoById" resultType="Integer" parameterType="Integer">
+		select id from bxp_p_userinfo where id=#{id} and isdel=0
+	</select>
+
+	<select id="SelectpasswordById" resultType="String" parameterType="Integer">
+		select password from bxp_p_userinfo where id=#{id} and isdel=0
+	</select>
+
+	<select id="SelectpaypasswordById" resultType="String" parameterType="Integer">
+		select paypassword from bxp_p_userinfo where id=#{id} and isdel=0
+	</select>
+
+	<select id="SelectidByloginname" resultType="Integer" parameterType="String">
+		select id from bxp_p_userinfo where loginname=#{loginname} and isdel=0
+	</select>
+
+
+	<select id="login" resultType="tx.bxp.entity.Userinfo" parameterType="tx.bxp.entity.Userinfo">
+		select id,loginname,nickname,sex,photo,address,email from bxp_p_userinfo where loginname=#{loginname} and  password=#{password}
+	</select>
+
+	<select id="SelectUserById" resultType="tx.bxp.entity.Userinfo" parameterType="Integer">
+		select id,loginname,nickname,sex,photo,address,email,isdel from bxp_p_userinfo where id=#{id}
+	</select>
+
+	<select id="SelectUserByUnionid" resultType="Integer" parameterType="String">
+		select id from bxp_p_userinfo where unionid=#{unionid}
+	</select>
+
+    <select id="selectUserinfoByIDandPay" resultType="tx.bxp.entity.Userinfo" parameterType="java.util.concurrent.ConcurrentHashMap">
+		select id,loginname,nickname,sex,photo,address,email from bxp_p_userinfo where id=#{id} and paypassword=#{paypassword}
+	</select>
+
+	<update id="deleteUser" parameterType="Integer">
+		update bxp_p_userinfo set channelid=null,flag=null where id=#{id}
+	</update>
+
+	<!-- 根据用户名查询用户信息 -->
+	<select id="selectUserByLoginname" parameterType="String" resultType="tx.bxp.entity.Userinfo">
+     SELECT id,loginname,'' password,'' paypassword,nickname,sex,photo,registerdate,lastlogindate,isdel,wechat,address,email,gradeid,integral,cityid,islogin,ifnull(version,0) version,type,unionid
+  	 FROM bxp_p_userinfo where isdel in (0,1) and loginname=#{loginname}
+     </select>
+
+</mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="tx.bxp.mapper.BankCardMapper">
+
+	<!-- 查询用户银行卡信息(多张)（银行卡保存）-->
+	<!--<resultMap id="tx.bxp.entity.BankCard" type="tx.bxp.entity.BankCard">-->
+	<!--<result column="bankname" property="bankname"></result>-->
+	<!--<result column="banknum" property="banknum"></result>-->
+    <!--</resultMap>-->
+
+	<select id="selectBankCardByUserid" parameterType="HashMap" resultType="tx.bxp.entity.BankCard">
+		select id,username,bankname,to_base64(banknum) banknum ,userid,cudate ,cardtype from  bxp_bankcard where userid=#{userid} LIMIT #{pagenum} ,#{pagesize}
+	</select>
+
+	<select id="selectBankCardByUserName" parameterType="HashMap" resultType="tx.bxp.entity.BankCard">
+		select id,username,bankname,to_base64(banknum) banknum ,userid,cudate ,cardtype from  bxp_bankcard where username=#{username}
+	</select>
+<!--select id,username,bankname,insert(banknum,4, 8, '********') banknum ,userid,cudate ,cardtype from  bxp_bankcard where username=#{username}-->
+   <!--查询详情-->
+	<select id="selectBankCardByid" parameterType="int" resultType="tx.bxp.entity.BankCard">
+		select id,username,bankname,cudate,to_base64(banknum) banknum ,userid,cudate,cardtype from  bxp_bankcard where id=#{id}
+	</select>
+
+
+	<!-- 插入新银行卡信息-->
+	<insert id="insertBankCard" parameterType="tx.bxp.entity.BankCard" >
+		        INSERT INTO bxp_bankcard (username,bankname,banknum,cudate,userid)
+                VALUES (#{username},#{bankname},#{banknum},now(),#{userid})
+	</insert>
+
+	<!--更新银行卡信息-->
+	<update id="updateBankCard" parameterType="tx.bxp.entity.BankCard">
+		UPDATE bxp_bankcard
+		<set >
+			<if test="username != null">username=#{username},</if>
+			<if test="bankname != null">bankname=#{bankname},</if>
+			<if test="banknum != null">banknum=#{banknum},</if>
+			<if test="userid != null">userid=#{userid}</if>
+		</set>
+		WHERE bxp_bankcard.id = #{id}
+	</update>
+
+	<!--删除-->
+	<delete id="deleteBankCard" parameterType="int">
+        DELETE FROM bxp_bankcard WHERE id = #{id}
+</delete>
+
+	<!--查询详情-->
+	<select id="selectBanknum" parameterType="string" resultType="int">
+		select count(*)  from  bxp_bankcard where banknum=#{banknum}
+	</select>
+
+	<select id="selectBanknumByUserName" parameterType="string" resultType="tx.bxp.entity.BankCard">
+		select *  from  bxp_bankcard where username=#{userLoginname}
+	</select>
+	<!-- 删除信息 -->
+	<delete id="removeBankCard" parameterType="String">
+		delete from bxp_bankcard  where username=#{username}
+	</delete>
+
+</mapper>

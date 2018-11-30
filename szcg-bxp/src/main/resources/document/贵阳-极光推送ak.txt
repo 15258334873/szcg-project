@@ -1,0 +1,7 @@
+贵阳-工作通--极光推送ak
+AppKey： 3eb6d999a0f468ce5e856a40  
+Master Secret：3fbc172786102d8df98f443b 
+
+贵阳-百姓拍--极光推送ak
+AppKey： 7ccd2760080263bb06af8dc1    
+Master Secret：1f644328756036c80e99eaff 

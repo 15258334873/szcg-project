@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tx.bxp.mapper.FileMapper">
+
+	<!--附件表新增-->
+    <insert id="insertFileInfo" parameterType="tx.bxp.entity.File" 	useGeneratedKeys="true" keyProperty="id">
+		     INSERT  INTO bxp_p_file(post_id,file_type,file_path,file_status,post_status,file_num) VALUE (#{post_id},#{file_type},#{file_path},#{file_status},#{post_status},#{file_num})
+	</insert>
+
+</mapper>

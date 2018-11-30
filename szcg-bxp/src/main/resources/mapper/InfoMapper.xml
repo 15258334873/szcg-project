@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tx.bxp.mapper.InfoMapper">
+
+	<!-- 新增资讯-->
+	<insert id="insertInfo" parameterType="tx.bxp.entity.Info" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO bxp_p_info (userid,title,content,info_type,address,lat,lon,creat_time,isdel,delperson,delete_time,Audit_status,auditor,audit_time)
+		VALUES (#{userid},#{title},#{content},#{info_type},#{address},#{lat},#{lon},now(),#{isdel},#{delperson},now(),#{Audit_status},#{auditor},now())
+    </insert>
+
+
+
+
+	<!--查询资讯列表-->
+	<select id="searchInfoList" parameterType="Integer" resultType="tx.bxp.dto.BxpProjectList">
+select a.id id ,IFNULL(a.title,'') title,a.content mome,IFNULL(d.browse_number,0) browsenumber,IFNULL(d.like_number,0) likenumber ,a.creat_time CreationTime,
+	IFNULL(imgurl,'') imgurl,
+	IFNULL(audiourl,'') audiourl ,
+	IFNULL(videourl,'') videourl,
+	'' Fid,a.address Address, #{type} type
+ from (SELECT * from bxp_p_info where isdel=0 and info_type=#{type} ORDER BY creat_time DESC LIMIT 0,200 ) a
+     left join
+   (SELECT post_id,
+	IFNULL(CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path),'') AS imgurl,
+	IFNULL(CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path),'') AS audiourl,
+	IFNULL(CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path),'') AS videourl FROM (
+	SELECT * FROM bxp_p_file
+		WHERE post_status=0 and file_num=1 and post_id IN(SELECT * FROM (SELECT Proj_Code FROM b_project WHERE Proj_Source_Way=5 AND state=1 ORDER BY Creation_Time DESC LIMIT 0,200) t6)
+	) t3 )t2  ON  a.id=t2.post_id
+        left join
+        (SELECT * FROM bxp_browse_like WHERE type=1 and  p_id in (SELECT * FROM (SELECT id FROM bxp_p_info WHERE isdel=0 and info_type=#{type} ORDER BY creat_time DESC LIMIT 0,200) t6)) d
+        on d.p_id=a.id
+
+    </select>
+
+
+
+	<!--查询资讯详情-->
+	<select id="searchInfoDetail" parameterType="HashMap" resultType="tx.bxp.dto.BxpProject">
+	SELECT  A.id id,IFNULL(A.title,'') title,A.content mome,#{type} type ,A.creat_time CreationTime,
+	IFNULL(imgurl,'') imgurl,
+	IFNULL(audiourl,'') audiourl ,
+	IFNULL(videourl,'') videourl ,
+	IFNULL(browse_number,0) browsenumber,
+	IFNULL(like_number,0) likenumber,
+	IFNULL(pId,0) islike,
+	IFNULL(G.p_Id,0) iscollection,
+	IFNULL(nickname,'') nickname ,
+	IFNULL(photo,'')  photo,
+	'' Fid,
+	a.address Address,
+	IFNULL(reply_number,0) replynumber
+
+	FROM (SELECT id,userid,title,content,info_type,creat_time,address  FROM bxp_p_info WHERE id=#{id} and info_type=#{type}) A
+	LEFT JOIN
+	(
+	   SELECT A.post_id,imgurl,videourl,audiourl  FROM (
+	   SELECT post_id,
+		IFNULL(GROUP_CONCAT(imgurl SEPARATOR '|'),'') AS imgurl
+		FROM (
+		  SELECT post_id,
+		  CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path) AS imgurl
+		  FROM bxp_p_file  WHERE post_id =#{id} AND file_type=1 AND post_status=1
+		)A GROUP BY post_id ) A
+		 LEFT JOIN
+		 (
+		SELECT post_id,
+		IFNULL(GROUP_CONCAT(audiourl SEPARATOR '|'),'') AS audiourl
+		FROM (
+		  SELECT post_id,
+		  CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path) AS audiourl
+		  FROM bxp_p_file  WHERE post_id =#{id} AND file_type=3 AND post_status=1
+		)B GROUP BY post_id) B
+	 ON A.post_id=B.post_id
+	LEFT JOIN (
+		SELECT post_id,
+		GROUP_CONCAT(videourl SEPARATOR '|') AS videourl
+		FROM (
+		  SELECT post_id,
+		  CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',file_path) AS videourl
+		  FROM bxp_p_file
+		  WHERE post_id =#{id} AND file_type=2 AND post_status=1)C GROUP BY post_id) C
+		  ON A.post_id=C.post_id
+		  ) D
+		  ON A.id=D.post_id
+	LEFT JOIN
+	(SELECT * FROM bxp_browse_like WHERE TYPE=#{type} AND p_id=#{id} ) E ON  A.id=E.p_id
+	LEFT JOIN
+	(SELECT pId FROM bxp_like WHERE pId=#{id} AND TYPE=0 AND userId=#{userid}) F ON  A.id=F.pId
+	 LEFT JOIN
+	(SELECT p_Id FROM  bxp_p_collection  WHERE p_Id=#{id} and user_Id=#{userid} and type=#{type}) G ON A.id=G.p_Id
+	LEFT JOIN
+	(SELECT id,nickname,CONCAT('http://app.gycgw.gov.cn:9501/files/imgs',photo) photo FROM bxp_p_userinfo WHERE id IN (SELECT userid FROM bxp_p_info WHERE id=#{id})) H ON A.userid=H.id
+        </select>
+</mapper>

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="axis">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/szcg-bxp/src/main/resources/lib/axis.jar!/" />
+      <root url="jar://$PROJECT_DIR$/szcg-bxp/src/main/resources/lib/commons-discovery-0.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/szcg-bxp/src/main/resources/lib/commons-logging-1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/szcg-bxp/src/main/resources/lib/jaxrpc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/szcg-bxp/src/main/resources/lib/wsdl4j.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

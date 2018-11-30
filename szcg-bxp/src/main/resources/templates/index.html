@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/ico" th:href="@{/img/logo_01.png}"/>
+    <title>首页</title>
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        $(function(){
+            $.ajax({
+                type : "post",
+                url : "http://10.33.1.25:8787/HWGG/api/Advertising/list",
+                data:{pram:"helparea"},
+                success : function(data) {
+                    if(data.returnFlag==0){
+                        $("body").html(data.returnObj.value);
+                    }
+                }
+            });
+        });
+    </script>
+
+</head>
+<body style="text-align: center">
+    <!--<span shiro:hasRole="ROLE_MANAGER">
+        管理員
+    </span>-->
+
+
+   <!-- <shiro:user>
+        <shiro:principal property="nickname"/>
+    </shiro:user>-->
+    <!--<input type="button" onclick="showx()">-->
+</body>
+</html>

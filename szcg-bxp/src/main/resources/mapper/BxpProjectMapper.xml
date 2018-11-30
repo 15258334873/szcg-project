@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tx.bxp.mapper.BxpProjectMapper">
+
+	<!--插入案件主表数据-->
+	<insert id="InsertBxpProject" parameterType="tx.bxp.entity.BxpProject" useGeneratedKeys="true" keyProperty="ProjCode">
+		insert into b_project(Proj_Name,Proj_Source_Way,source_system,Creation_Time,Creator_User_Id,state,Start_Date,Step_Date)
+		 values(#{ProjName},#{ProjSourceWay},#{sourcesystem},now(),#{CreatorUserId},0,now(),now())
+	</insert>
+	<!--插入案件奖励表-->
+	<insert id="InsertBxpProjectaward" parameterType="HashMap" >
+		insert into bxp_project_award(pId,userId,task_type,state,cudate)
+		 values(#{id},#{userId},0,0,now())
+	</insert>
+	<!--插入案件举报表-->
+	<insert id="InsertBxpProjectpub" parameterType="Integer" >
+		insert into b_project_pub(ProjCode,ProjSource,Name)
+		 values(#{id},5,'百姓拍')
+	</insert>
+
+	<!--查询案件列表-->
+	<select id="SelectBxpProjectList"  resultType="tx.bxp.dto.BxpProjectList">
+	SELECT t1.Proj_Code id,t1.Creation_Time CreationTime,"" title,
+	device_sign mome, Fid, Address,
+	IFNULL(imgurl,'') imgurl,
+	IFNULL(audiourl,'') audiourl ,
+	IFNULL(videourl,'') videourl ,
+	IFNULL(browse_number,0) browsenumber,IFNULL(like_number,0) likenumber,
+	0 TYPE
+	FROM (SELECT Proj_Code,Creation_Time,Proj_Source_Way FROM b_project WHERE Proj_Source_Way=5 AND state=1 ORDER BY Creation_Time DESC LIMIT 0,200 ) t1
+	LEFT JOIN
+	b_project_detail ON t1.Proj_Code=b_project_detail.Proj_Code
+	LEFT JOIN
+	(SELECT post_id,
+	IFNULL(CONCAT('http://app.gycgw.gov.cn:9501/image',file_path),'') AS imgurl,
+	IFNULL(CONCAT('http://app.gycgw.gov.cn:9501/image',file_path),'') AS audiourl,
+	IFNULL(CONCAT('http://app.gycgw.gov.cn:9501/image',file_path),'') AS videourl
+	FROM (
+	SELECT * FROM bxp_p_file
+		WHERE post_status=0 and file_num=1 and post_id IN(SELECT * FROM (SELECT Proj_Code FROM b_project WHERE Proj_Source_Way=5 AND state=1 ORDER BY Creation_Time DESC LIMIT 0,200) t6)
+	) t3 )t2  ON  t1.Proj_Code=t2.post_id
+	LEFT JOIN
+	(SELECT * FROM bxp_browse_like WHERE TYPE=0 AND p_id IN(SELECT * FROM (SELECT Proj_Code FROM b_project WHERE Proj_Source_Way=5 AND state=1 ORDER BY Creation_Time DESC LIMIT 0,200) t7)) t8 ON  t1.Proj_Code=t8.p_id
+	</select>
+
+	<!--查询案件细节-->
+	<select id="SelectBxpProjectById" resultType="tx.bxp.dto.BxpProject" parameterType="HashMap">
+	SELECT  t1.Proj_Code id,"" title,
+	t1.Creation_Time CreationTime,
+	device_sign mome,
+	Fid,
+	Address,
+	0 TYPE,
+	IFNULL(imgurl,'') imgurl,
+	IFNULL(audiourl,'') audiourl ,
+	IFNULL(videourl,'') videourl ,
+	IFNULL(browse_number,0) browsenumber,
+	IFNULL(like_number,0) likenumber,
+	IFNULL(pId,0) islike,
+	IFNULL(t7.p_Id,0) iscollection,
+	IFNULL(nickname,'') nickname ,
+	IFNULL(photo,'') photo,
+	IFNULL(reply_number,0) replynumber
+
+	FROM (SELECT Proj_Code,Creation_Time,Proj_Source_Way,Creator_User_Id FROM b_project WHERE Proj_Code=#{id} ) t1
+	LEFT JOIN
+	b_project_detail ON t1.Proj_Code=b_project_detail.Proj_Code
+	LEFT JOIN
+	(
+	   SELECT t1.post_id,imgurl,videourl,audiourl  FROM (
+	   SELECT post_id,
+		IFNULL(GROUP_CONCAT(imgurl SEPARATOR '|'),'') AS imgurl
+		FROM (
+		  SELECT post_id,
+		  CONCAT('http://app.gycgw.gov.cn:9501/image',file_path) AS imgurl
+		  FROM bxp_p_file  WHERE post_id =#{id} AND file_type=1 AND post_status=0
+		)t1 GROUP BY post_id ) t1
+		 LEFT JOIN
+		 (
+		SELECT post_id,
+		IFNULL(GROUP_CONCAT(audiourl SEPARATOR '|'),'') AS audiourl
+		FROM (
+		  SELECT post_id,
+		  CONCAT('http://app.gycgw.gov.cn:9501/image',file_path) AS audiourl
+		  FROM bxp_p_file  WHERE post_id =#{id} AND file_type=3 AND post_status=0
+		)t2 GROUP BY post_id) t2
+	ON t1.post_id=t2.post_id
+	LEFT JOIN (
+		SELECT post_id,
+		GROUP_CONCAT(videourl SEPARATOR '|') AS videourl
+		FROM (
+		  SELECT post_id,
+		  CONCAT('http://app.gycgw.gov.cn:9501/image',file_path) AS videourl
+		  FROM bxp_p_file
+		  WHERE post_id =#{id} AND file_type=2 AND post_status=0 )t3 GROUP BY post_id) t3
+		  ON t1.post_id=t3.post_id
+		  ) t4
+		  ON t1.Proj_Code=t4.post_id
+	LEFT JOIN
+	(SELECT * FROM bxp_browse_like WHERE TYPE=0 AND p_id=#{id} ) t5 ON  t1.Proj_Code=t5.p_id
+	LEFT JOIN
+	(SELECT pId FROM bxp_like WHERE pId=#{id} AND TYPE=0 AND userId=#{uesrId}) t6 ON  t1.Proj_Code=t6.pId
+	 LEFT JOIN
+	(SELECT p_Id FROM  bxp_p_collection  WHERE TYPE=0 AND p_Id=#{id} and user_Id=#{uesrId} ) t7 ON t1.Proj_Code=t7.p_Id
+	LEFT JOIN
+	(SELECT id,nickname,CONCAT('http://app.gycgw.gov.cn:9501/image',photo) photo FROM bxp_p_userinfo WHERE id IN (SELECT Creator_User_Id FROM b_project WHERE Proj_Code=#{id}) ) t8 ON t1.Creator_User_Id=t8.id
+	</select>
+
+	<!--我的案件-->
+	<select id="SelectMyBxpProjectList"  resultType="tx.bxp.dto.MyBxpProject" parameterType="HashMap">
+	SELECT t1.Proj_Code id,t1.Creation_Time CreationTime, '' title,
+	device_sign mome, Fid, Address,
+	IFNULL(imgurl,'') imgurl,
+	IFNULL(audiourl,'') audiourl ,
+	IFNULL(videourl,'') videourl ,
+	IFNULL(browse_number,0) browsenumber,IFNULL(like_number,0) likenumber,
+	0 TYPE,state,money,score,t1.Proj_Code Projcode
+	FROM (SELECT Proj_Code,Creation_Time,Proj_Source_Way,state FROM b_project WHERE Proj_Source_Way=5 and
+		Creator_User_Id=#{userId}
+	 <if test="state!=null and state!=''">
+		 and  state=#{state}
+	 </if>
+	 ORDER BY Creation_Time DESC LIMIT #{Page},#{PageSize} ) t1
+	LEFT JOIN
+	b_project_detail ON t1.Proj_Code=b_project_detail.Proj_Code
+	LEFT JOIN
+	(SELECT post_id,
+	IFNULL(CONCAT('http://app.gycgw.gov.cn:9501/image',file_path),'') AS imgurl,
+	IFNULL(CONCAT('http://app.gycgw.gov.cn:9501/image',file_path),'') AS audiourl,
+	IFNULL(CONCAT('http://app.gycgw.gov.cn:9501/image',file_path),'') AS videourl
+		FROM (
+		SELECT * FROM bxp_p_file
+		WHERE post_status=0 and file_num=1 and post_id IN(SELECT * FROM (SELECT Proj_Code FROM b_project WHERE Proj_Source_Way=5 and
+		Creator_User_Id=#{userId}
+		<if test="state!=null and state!=''">
+			and  state=#{state}
+		</if>
+		ORDER BY Creation_Time DESC LIMIT #{Page},#{PageSize}) t6)
+		) t3 )t2 ON  t1.Proj_Code=t2.post_id
+	LEFT JOIN
+	(SELECT * FROM bxp_browse_like WHERE TYPE=0 AND p_id IN(SELECT * FROM (SELECT Proj_Code FROM b_project WHERE Proj_Source_Way=5
+		<if test="state!=null and state!=''">
+			and  state=#{state}
+		</if>
+		 ORDER BY Creation_Time DESC LIMIT #{Page},#{PageSize}) t7)) t8 ON  t1.Proj_Code=t8.p_id
+	left join
+		(select pId,money,score  from bxp_project_award where pId IN(SELECT * FROM (SELECT Proj_Code FROM b_project WHERE Proj_Source_Way=5
+		<if test="state!=null and state!=''">
+			and  state=#{state}
+		</if> ORDER BY Creation_Time DESC LIMIT #{Page},#{PageSize}) t7)) t9 on t1.Proj_Code=t9.pid
+	</select>
+
+	<!-- 求和 -->
+	<select id="selectSUM" resultType="HashMap">
+		select ifnull(jb,0) jb ,ifnull(hs,0) hs,a.cu_date cudate from (
+		select count(1) jb, DATE_FORMAT(Creation_Time,'%m-%d') cu_date from b_project where  TIMESTAMPDIFF(DAY,Creation_Time,now()) &lt; 7 group by DATE_FORMAT(Creation_Time,'%m-%d')) a
+		left join
+		(
+		select count(1) hs, DATE_FORMAT(cu_date,'%m-%d') cu_date from p_task where  TIMESTAMPDIFF(DAY,cu_date,now()) &lt; 7 group by DATE_FORMAT(cu_date,'%m-%d')
+		) b on a.cu_date=b.cu_date
+	</select>
+
+	<select id="selectbyUseridCount" parameterType="Integer" resultType="Integer">
+		select  IFNULL(count(1),0)  from b_project where date_format(Creation_Time,'%Y-%m-%d')=date_format(now(),'%Y-%m-%d') and Creator_User_Id=#{userId}
+	</select>
+
+
+
+	<select id="SelectBxpProjectById1" parameterType="Integer" resultType="tx.bxp.entity.Userinfo">
+
+	select * from bxp_p_userinfo where id in(select Creator_User_Id from b_project where Proj_Code=#{id})
+	</select>
+</mapper>
